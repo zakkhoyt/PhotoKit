@@ -10,13 +10,17 @@
 #import "AssetController.h"
 #import "AssetGroupTableViewCell.h"
 #import "VWWAssetGroupViewController.h"
+#import "PhotosController.h"
 
+//#define VWW_USE_PHOTOS 1
 static NSString *VWWSegueAssetGroupsToAssetGroup = @"VWWSegueAssetGroupsToAssetGroup";
 
 @interface VWWAssetGroupsViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) AssetController *assetController;
 @property (nonatomic, strong) NSArray *assetGroups;
+@property (nonatomic, strong) NSArray *collectionGroups;
+@property (nonatomic, strong) PhotosController *photosController;
 @end
 
 @implementation VWWAssetGroupsViewController
@@ -25,11 +29,21 @@ static NSString *VWWSegueAssetGroupsToAssetGroup = @"VWWSegueAssetGroupsToAssetG
     [super viewDidLoad];
     
     self.assetController = [AssetController sharedInstance];
+    self.photosController = [PhotosController sharedInstance];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+    
+#if defined(VWW_USE_PHOTOS)
+    [self.photosController getCollectionsOfCollectionsWithCompletionBlock:^(NSArray *array) {
+        
+    } errorBlock:^(NSError *error) {
+        
+    }];
+
+#else
     [self.assetController getAssetGroupsWithCompletionBlock:^(NSArray *assetGroups) {
         self.assetGroups = [assetGroups copy];
         [self.tableView reloadData];
@@ -37,6 +51,8 @@ static NSString *VWWSegueAssetGroupsToAssetGroup = @"VWWSegueAssetGroupsToAssetG
         self.assetGroups = nil;
         [self.tableView reloadData];
     }];
+
+#endif
 }
 
 
@@ -63,7 +79,12 @@ static NSString *VWWSegueAssetGroupsToAssetGroup = @"VWWSegueAssetGroupsToAssetG
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+#if defined(VWW_USE_PHOTOS)
+    return self.collectionGroups.count;
+#else
     return self.assetGroups.count;
+#endif
+    
 //    return 1;
 }
 

@@ -18,11 +18,14 @@
 #import "VWWMetaDictionaryViewController.h"
 #import "VWWMetaArrayViewController.h"
 
-@interface VWWMetaViewController () 
+@import MessageUI;
+
+@interface VWWMetaViewController () <MFMailComposeViewControllerDelegate, VWWStringTableViewCellDelegate, VWWNumberTableViewCellDelegate >
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segment;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (nonatomic, strong) MFMailComposeViewController *mail;
+@property (nonatomic, strong) NSMutableDictionary *metadata;
 @end
 
 @implementation VWWMetaViewController
@@ -41,15 +44,13 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    NSDictionary *metadata = self.asset.defaultRepresentation.metadata;
-    if(metadata){
-        self.textView.text = metadata.description;
-        VWW_LOG_INFO(@"Metadata: %@", metadata.description);
+    self.metadata = [self.asset.defaultRepresentation.metadata mutableCopy];
+    if(self.metadata){
+        self.textView.text = self.metadata.description;
+        VWW_LOG_INFO(@"Metadata: %@", self.metadata.description);
     } else {
         self.textView.text = @"n/a";
     }
-    
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,6 +91,20 @@
     }
 }
 
+- (IBAction)shareButtonTouchUpInside:(id)sender {
+//    self.mail = [[MFMailComposeViewController alloc] init];
+//    self.mail.delegate = self;
+    
+}
+- (IBAction)saveButtonTouchUpInside:(id)sender {
+    [[AssetController sharedInstance] saveAsset:self.asset metadata:self.metadata completionBlock:^(BOOL success) {
+        if(success){
+            VWW_LOG_INFO(@"Save complete");
+        } else {
+            VWW_LOG_ERROR(@"Could not save asset");
+        }
+    }];
+}
 
 #pragma mark UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -97,13 +112,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.asset.defaultRepresentation.metadata.allKeys.count;
+    return self.metadata.allKeys.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    NSString *key = self.asset.defaultRepresentation.metadata.allKeys[indexPath.row];
-    NSObject *obj = self.asset.defaultRepresentation.metadata[key];
+    NSString *key = self.metadata.allKeys[indexPath.row];
+    NSObject *obj = self.metadata[key];
     if([obj isKindOfClass:[NSDictionary class]]){
         VWWDictionaryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VWWDictionaryTableViewCell"];
         cell.title = key;
@@ -116,15 +131,17 @@
         return cell;
     } else if([obj isKindOfClass:[NSString class]]){
         VWWStringTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VWWStringTableViewCell"];
+        cell.delegate = self;
         cell.title = key;
-        NSString *value = self.asset.defaultRepresentation.metadata[key];
+        NSString *value = self.metadata[key];
         cell.value = value;
         [cell setAccessoryType:UITableViewCellAccessoryNone];
         return cell;
     } else if([obj isKindOfClass:[NSNumber class]]){
         VWWNumberTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VWWNumberTableViewCell"];
+        cell.delegate = self;
         cell.title = key;
-        NSNumber *value = self.asset.defaultRepresentation.metadata[key];
+        NSNumber *value = self.metadata[key];
         cell.value = value;
         [cell setAccessoryType:UITableViewCellAccessoryNone];
         return cell;
@@ -140,15 +157,15 @@
     
     if([cell isKindOfClass:[VWWDictionaryTableViewCell class]]){
         VWWMetaDictionaryViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"VWWMetaDictionaryViewController"];
-        NSString *key = self.asset.defaultRepresentation.metadata.allKeys[indexPath.row];
-        NSDictionary *dictionary = self.asset.defaultRepresentation.metadata[key];
+        NSString *key = self.metadata.allKeys[indexPath.row];
+        NSDictionary *dictionary = self.metadata[key];
         vc.key = ((VWWDictionaryTableViewCell*)cell).title;
         vc.dictionary = dictionary;
         [self.navigationController pushViewController:vc animated:YES];
     } else if([cell isKindOfClass:[VWWArrayTableViewCell class]]){
         VWWMetaArrayViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"VWWMetaArrayViewController"];
-        NSString *key = self.asset.defaultRepresentation.metadata.allKeys[indexPath.row];
-        NSArray *array = self.asset.defaultRepresentation.metadata[key];
+        NSString *key = self.metadata.allKeys[indexPath.row];
+        NSArray *array = self.metadata[key];
         vc.array = array;
         vc.key = ((VWWArrayTableViewCell*)cell).title;
         [self.navigationController pushViewController:vc animated:YES];
@@ -157,6 +174,22 @@
         [cell setSelected:NO];
     }
 }
+
+
+#pragma mark VWWStringTableViewCellDelegate
+-(void)stringTableViewCell:(VWWStringTableViewCell*)sender didChangeValue:(NSString*)value{
+    VWW_LOG_INFO(@"Updating %@ to %@", sender.title, sender.value);
+    self.metadata[sender.title] = value;
+}
+
+
+#pragma mark VWWNumberTableViewCellDelegate
+-(void)numberTableViewCell:(VWWNumberTableViewCell*)sender didChangeValue:(NSNumber*)value{
+    VWW_LOG_INFO(@"Updating %@ to %@", sender.title, sender.value);
+    self.metadata[sender.title] = value;
+}
+
+
 
 
 @end

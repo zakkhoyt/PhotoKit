@@ -29,6 +29,7 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.delegate stringTableViewCell:self didChangeValue:textField.text];
     [textField resignFirstResponder];
     return NO;
 }

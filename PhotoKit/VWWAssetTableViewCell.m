@@ -11,6 +11,8 @@
 
 @interface VWWAssetTableViewCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *assetImageView;
+@property (weak, nonatomic) IBOutlet UIButton *geoButton;
+@property (weak, nonatomic) IBOutlet UIButton *metaButton;
 
 //@property (weak, nonatomic) IBOutlet UILabel *urlLabel;
 //@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
@@ -46,6 +48,13 @@
     
     self.imageView.image = [UIImage imageWithCGImage:self.asset.thumbnail];
     
+    NSDictionary *metadata = self.asset.defaultRepresentation.metadata;
+    
+    if(metadata[@"{GPS}"]){
+        self.geoButton.hidden = NO;
+    } else {
+        self.geoButton.hidden = YES;
+    }
 
 }
 - (IBAction)metaButtonTouchUpInside:(id)sender {

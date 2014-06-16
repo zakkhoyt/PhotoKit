@@ -21,6 +21,7 @@
 		CF329523194E47DA00762E15 /* VWWStringTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF329522194E47DA00762E15 /* VWWStringTableViewCell.m */; };
 		CF329527194E483900762E15 /* VWWDictionaryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF329526194E483900762E15 /* VWWDictionaryTableViewCell.m */; };
 		CF32952A194E484400762E15 /* VWWArrayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF329529194E484400762E15 /* VWWArrayTableViewCell.m */; };
+		CF32952D194E769900762E15 /* PhotosController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF32952C194E769900762E15 /* PhotosController.m */; };
 		CF7A5215194E1DFE00304801 /* AssetController.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7A5214194E1DFE00304801 /* AssetController.m */; };
 		CF7A5226194E1E8600304801 /* NSTimer+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7A521C194E1E8600304801 /* NSTimer+Blocks.m */; };
 		CF7A5227194E1E8600304801 /* UIColor+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7A521E194E1E8600304801 /* UIColor+Custom.m */; };
@@ -69,6 +70,8 @@
 		CF329526194E483900762E15 /* VWWDictionaryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWDictionaryTableViewCell.m; sourceTree = "<group>"; };
 		CF329528194E484400762E15 /* VWWArrayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VWWArrayTableViewCell.h; sourceTree = "<group>"; };
 		CF329529194E484400762E15 /* VWWArrayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VWWArrayTableViewCell.m; sourceTree = "<group>"; };
+		CF32952B194E769900762E15 /* PhotosController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosController.h; sourceTree = "<group>"; };
+		CF32952C194E769900762E15 /* PhotosController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotosController.m; sourceTree = "<group>"; };
 		CF7A5213194E1DFE00304801 /* AssetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetController.h; sourceTree = "<group>"; };
 		CF7A5214194E1DFE00304801 /* AssetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetController.m; sourceTree = "<group>"; };
 		CF7A5217194E1E8600304801 /* NSDate+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utilities.h"; sourceTree = "<group>"; };
@@ -210,6 +213,8 @@
 			children = (
 				CF7A5213194E1DFE00304801 /* AssetController.h */,
 				CF7A5214194E1DFE00304801 /* AssetController.m */,
+				CF32952B194E769900762E15 /* PhotosController.h */,
+				CF32952C194E769900762E15 /* PhotosController.m */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -417,6 +422,7 @@
 				C60BA89D1947B8C1001643B8 /* main.m in Sources */,
 				CF329510194E3CB500762E15 /* VWWMetaViewController.m in Sources */,
 				CF7A5227194E1E8600304801 /* UIColor+Custom.m in Sources */,
+				CF32952D194E769900762E15 /* PhotosController.m in Sources */,
 				CF7A5226194E1E8600304801 /* NSTimer+Blocks.m in Sources */,
 				CF961A4A194E35620048556F /* VWWAssetTableViewCell.m in Sources */,
 				CF32951D194E472600762E15 /* VWWMetaArrayViewController.m in Sources */,

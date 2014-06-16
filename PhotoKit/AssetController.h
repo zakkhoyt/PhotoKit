@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-@import Photos;
-@import CoreLocation;
+
+
 @import AssetsLibrary;
 @import ImageIO;
+@import CoreLocation;
 
 #import "VWW.h"
 
@@ -24,4 +25,8 @@
 -(void)getAssetGroupsWithCompletionBlock:(VWWArrayBlock)completionBlock errorBlock:(VWWErrorBlock)errorBlock;
 -(void)getAssetsForGroup:(ALAssetsGroup*)assetsGroup completionBlock:(VWWArrayBlock)completionBlock;
 -(void)getTagCountForGroups:(ALAssetsGroup*)group updateBlock:(VWWTagCountBlock)updateBlock;
+@end
+
+@interface AssetController (Save)
+-(void)saveAsset:(ALAsset*)asset metadata:(NSDictionary*)metadata completionBlock:(VWWBoolBlock)completionBlock;
 @end

@@ -9,8 +9,6 @@
 #import "AssetController.h"
 
 @interface AssetController ()
-//@property (nonatomic, strong) PHPhotoLibrary *photosLibrary;
-//@property (nonatomic, strong) PHImageManager *imageManager;
 @property (nonatomic, strong, readwrite) NSDate *lastScanDate;
 @property (nonatomic, strong) ALAssetsLibrary *assetsLibrary;
 //@property (nonatomic, strong, readwrite) NSMutableArray *photos;
@@ -538,6 +536,44 @@
 //    });
 //}
 
+@end
+
+@implementation AssetController (Save)
+-(void)saveAsset:(ALAsset*)asset metadata:(NSDictionary*)metadata completionBlock:(VWWBoolBlock)completionBlock{
+//    [asset writeModifiedImageDataToSavedPhotosAlbum:nil metadata:<#(NSDictionary *)#> completionBlock:<#^(NSURL *assetURL, NSError *error)completionBlock#>]
+    
+    
+//    // Returns YES if the application is able to edit the asset.  Returns NO if the application is not able to edit the asset.
+//    // Applications are only allowed to edit assets that they originally wrote.
+//    @property (nonatomic, readonly, getter=isEditable) BOOL editable __OSX_AVAILABLE_STARTING(__MAC_NA, __IPHONE_5_0);
+//    
+//    // Replaces the image data in the calling asset with the supplied image data.
+//    // The caller should check the editable property of the asset to see if it is possible to replace the image data.
+//    // If the application is able to edit the asset, the completion block will return the same assetURL as the calling asset, since a new asset is not being created.
+//    // If the application is not able to edit the asset, the completion block will return a nil assetURL and an ALAssetsLibraryWriteFailedError.
+//    - (void)setImageData:(NSData *)imageData metadata:(NSDictionary *)metadata completionBlock:(ALAssetsLibraryWriteImageCompletionBlock)completionBlock __OSX_AVAILABLE_STARTING(__MAC_NA, __IPHONE_5_0);
+
+//    if([asset isEditable] == NO){
+//        
+//    } else {
+
+//        CGDataProviderRef provider = CGImageGetDataProvider(asset.defaultRepresentation.fullResolutionImage);
+//        NSData* data = (id)CFBridgingRelease(CGDataProviderCopyData(provider));
+//        [asset writeModifiedImageDataToSavedPhotosAlbum:data metadata:metadata completionBlock:^(NSURL *assetURL, NSError *error) {
+//            completionBlock(assetURL);
+//        }];
+    
+    [self.assetsLibrary writeImageToSavedPhotosAlbum:asset.defaultRepresentation.fullResolutionImage
+                            metadata:metadata
+                     completionBlock:^(NSURL *assetURL, NSError *error) {
+                         if(error){
+                             VWW_LOG_ERROR(@"Could not save image to saved photos album: %@", error.description);
+                         }
+                         completionBlock(assetURL != nil);
+                     }];
+    
+//    }
+}
 @end
 //-(void)getThingsWithCompletionBlock:(VWWArrayBlock)arrayBlock{
 //    PHFetchResult *results = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:nil];
